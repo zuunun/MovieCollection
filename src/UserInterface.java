@@ -1,81 +1,119 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
 public class UserInterface {
-    Scanner input = new Scanner(System.in);
-    private MovieController movieController;
+    private final Scanner scanner = new Scanner(System.in);
+    private final MovieController movieController;
 
     public UserInterface() {
-        movieController = new MovieController();
+        this.movieController = new MovieController();
     }
-    public void startProgram(){
-        int choice = 0;
 
-        while (choice != 4){
-            showMenu();
-            choice = input.nextInt();
-            input.nextLine();
+    public void startProgram() {
+        System.out.print("\u001B[35m"); // Set text color to purple
+        System.out.println("   🌸🌼🌺🌻🌷🌹🏵️🌸🌼🌺🌻🌷🌹🏵️🌸🌼🌺🌻🌷🌹🏵️");
+        System.out.println("  🌺                                            🌺");
+        System.out.println(" 🌸 WELCOME TO THE WORLD'S BEST MOVIE COLLECTION  🌸");
+        System.out.println("  🌼                                            🌼");
+        System.out.println("   🏵️🌹🌷🌻🌺🌼🌸🏵️🌹🌷🌻🌺🌼🌸🏵️🌹🌷🌻🌺🌼🌸  \u001B[0m");
+        showMenu();
+        String userChoice;
 
-            if(choice == 1 ){
-                addMovie();
-            }
-            else if (choice == 2) {
-                movieController.getList();
-            }
-            else if (choice == 3){
-                searchMovie();
-            }
-            else if (choice == 4) {
-                System.out.println("Afslut");
-            }
-            else {
-                System.out.println("Ugyldigt valg. Vælg et tal mellem 1-4!");
-            }
+        do {
+            System.out.print("Insert your demand or type help for inctructions: ");
+            userChoice = getStringInput().toLowerCase();
 
-        }
+            switch (userChoice) {
+                case "add":
+                    addMovie();
+                    break;
+                case "list":
+                    movieController.printList();
+                    break;
+                case "search":
+                    searchMovie();
+                    break;
+                case "edit":
+                    editMovie();
+                    break;
+                case "help":
+                    showMenu();
+                    break;
+                case "exit":
+                    System.out.println("\u001B[35m──────────────────────────────────────────────────────");
+                    System.out.println("              Exiting Movie Collection                ");
+                    System.out.println("──────────────────────────────────────────────────────\u001B[0m");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (!userChoice.equals("exit"));
     }
+
     private void showMenu() {
-        System.out.println("Velkommen til en 10/10 filmsamling");
-        System.out.println("1. Opret en film");
-        System.out.println("2. Vis liste af film");
-        System.out.println("3. Søg efter film");
-        System.out.println("4. Afslut");
-        System.out.println("Indtast dit valg: ");
-
+        System.out.println("Here are the following options:");
+        System.out.println("🌺'Add': to add a new movie");
+        System.out.println("🌺'List': for list of movies");
+        System.out.println("🌺'Search': Search for movie");
+        System.out.println("🌺'Edit': To edit movie");
+        System.out.println("🌺'Exit': to exit program");
     }
-    private void addMovie() {
-        System.out.println("Enter film details:");
-        System.out.println("Title:");
-        String title = input.nextLine();
-        System.out.println("Director:");
-        String director = input.nextLine();
-        System.out.println("Year:");
-        int year = input.nextInt();
-        input.nextLine(); // consume newline
-        System.out.println("Genre:");
-        String genre = input.nextLine();
-        boolean isInColor = false;
-        System.out.println("Is movie in color? Type yes, or no");
-        String erIFarve = input.next();
-        erIFarve = erIFarve.toLowerCase();
-        if (erIFarve.equals("yes")) {
-            isInColor = true;
+
+    private String getStringInput() {
+        try {
+            String inputString = scanner.nextLine().trim().toLowerCase();
+            if (inputString.isEmpty()) {
+                System.out.println("That didn't work. Try again.");
+                return getStringInput();
+            }
+            return inputString;
+        } catch (InputMismatchException e) {
+            System.out.println("That didn't work. Try again.");
+            scanner.nextLine(); // Consume the invalid input
+            return getStringInput();
         }
+    }
+
+    private void addMovie() {
+        System.out.println("---------Add film details below---------");
+
+        System.out.print("Title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Director: ");
+        String director = scanner.nextLine();
+
+        System.out.print("Year: ");
+        int year = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Genre: ");
+        String genre = scanner.nextLine();
+
+        System.out.print("Is the movie in color? Type yes/no: ");
+        boolean isInColor = scanner.nextLine().equalsIgnoreCase("yes");
+
         System.out.print("Length in minutes: ");
-        double lengthMinutes = input.nextDouble();
-        input.nextLine(); // consume newline
+        double lengthMinutes = scanner.nextDouble();
+        scanner.nextLine();
 
         movieController.addMovie(title, director, year, genre, isInColor, lengthMinutes);
     }
 
     private void searchMovie() {
-        System.out.println("Indtast søgning: ");
-        String søgning = input.nextLine();
-        movieController.searchMovie(søgning);
+        System.out.print("Enter search: ");
+        String search = scanner.nextLine();
+        movieController.searchMovie(search);
     }
-    private void editMovie(){
-        System.out.println("Indtast titel på den film du gerne vil redigere: ");
-        String titleEdit = input.nextLine();
+
+    private void editMovie() {
+        System.out.print("Enter title to edit: ");
+        String edit = scanner.nextLine();
+        movieController.editMovie(edit);
     }
 }
+
+
 
 
 
