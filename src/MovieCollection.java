@@ -23,6 +23,51 @@ public class MovieCollection {
         return title + "was added to the collection!";
     }
 
+    public void removeMovie(String title) {
+        boolean removed = false;
+        for (Movie movie : movieCollection) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                movieCollection.remove(movie);
+                System.out.println("Movie '" + title + "' has been removed from the collection.");
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) {
+            System.out.println("Movie not found in the collection.");
+        }
+    }
+
+    private String getStringInput() {
+        return scanner.nextLine().trim();
+    }
+
+    private int getIntegerInput() {
+        int value;
+        while (true) {
+            try {
+                value = Integer.parseInt(getStringInput());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter an integer value:");
+            }
+        }
+        return value;
+    }
+
+    private double getDoubleInput() {
+        double value;
+        while (true) {
+            try {
+                value = Double.parseDouble(getStringInput());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a numeric value:");
+            }
+        }
+        return value;
+    }
+
     public ArrayList<Movie> getList() {
         return movieCollection;
     }
@@ -57,24 +102,22 @@ public class MovieCollection {
         while (continueEditing) {
             boolean hasFound = false;
 
-
             for (Movie m : movieCollection) {
                 if (m.getTitle().equalsIgnoreCase(title)) {
                     System.out.println("Enter new movie details:");
-                    System.out.println("Director");
+                    System.out.print("Director: ");
                     String newDirector = scanner.nextLine();
-                    System.out.println("Year:");
-                    int newYear = scanner.nextInt();
-                    System.out.println("Genre: ");
+                    System.out.print("Year: ");
+                    int newYear = getIntegerInput();
+                    System.out.print("Genre: ");
                     String newGenre = scanner.nextLine();
-                    System.out.println("Is movie in color? Type yes or no: ");
+                    System.out.print("Is movie in color? Type yes or no: ");
                     String newColor = scanner.nextLine().toLowerCase();
                     boolean newIsInColor = newColor.equals("yes");
-                    System.out.println("Length in minutes: ");
-                    double newLengthInMinutes = scanner.nextDouble();
-                    scanner.nextLine();
+                    System.out.print("Length in minutes: ");
+                    double newLengthInMinutes = getDoubleInput();
 
-                    //Update new movie details:
+                    // Update new movie details:
                     m.setDirector(newDirector);
                     m.setYear(newYear);
                     m.setGenre(newGenre);
@@ -94,12 +137,11 @@ public class MovieCollection {
             continueEditing = userChoice.equalsIgnoreCase("yes");
 
             if (continueEditing) {
-                System.out.println("Enter title to edit:");
+                System.out.print("Enter title to edit: ");
                 title = scanner.nextLine();
-
             } else {
                 System.out.println("Program has ended");
-                scanner.close();
+                // scanner.close(); // Avoid closing scanner to keep it open for further input
             }
         }
     }

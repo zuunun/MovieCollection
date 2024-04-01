@@ -20,7 +20,7 @@ public class UserInterface {
         String userChoice;
 
         do {
-            System.out.print("Insert your demand or type help for inctructions: ");
+            System.out.print("Insert your demand or type help for instructions: ");
             userChoice = getStringInput().toLowerCase();
 
             switch (userChoice) {
@@ -36,6 +36,8 @@ public class UserInterface {
                 case "edit":
                     editMovie();
                     break;
+                case "remove":
+                    removeMovie();
                 case "help":
                     showMenu();
                     break;
@@ -56,6 +58,7 @@ public class UserInterface {
         System.out.println("🌺'List': for list of movies");
         System.out.println("🌺'Search': Search for movie");
         System.out.println("🌺'Edit': To edit movie");
+        System.out.println("🌺'Remove': To remove movie");
         System.out.println("🌺'Exit': to exit program");
     }
 
@@ -73,6 +76,11 @@ public class UserInterface {
             return getStringInput();
         }
     }
+    private void removeMovie(){
+        System.out.println("Enter title to remove: ");
+        String title = scanner.nextLine();
+        movieController.removeMovie(title);
+    }
 
     private void addMovie() {
         System.out.println("---------Add film details below---------");
@@ -84,8 +92,7 @@ public class UserInterface {
         String director = scanner.nextLine();
 
         System.out.print("Year: ");
-        int year = scanner.nextInt();
-        scanner.nextLine();
+        int year = getIntegerInput();
 
         System.out.print("Genre: ");
         String genre = scanner.nextLine();
@@ -94,11 +101,11 @@ public class UserInterface {
         boolean isInColor = scanner.nextLine().equalsIgnoreCase("yes");
 
         System.out.print("Length in minutes: ");
-        double lengthMinutes = scanner.nextDouble();
-        scanner.nextLine();
+        double lengthMinutes = getDoubleInput();
 
         movieController.addMovie(title, director, year, genre, isInColor, lengthMinutes);
     }
+
 
     private void searchMovie() {
         System.out.print("Enter search: ");
@@ -110,6 +117,26 @@ public class UserInterface {
         System.out.print("Enter title to edit: ");
         String edit = scanner.nextLine();
         movieController.editMovie(edit);
+    }
+
+    private int getIntegerInput() {
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter an integer value.");
+            scanner.nextLine(); // Consume the invalid input
+            return getIntegerInput();
+        }
+    }
+
+    private double getDoubleInput() {
+        try {
+            return scanner.nextDouble();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a numeric value.");
+            scanner.nextLine(); // Consume the invalid input
+            return getDoubleInput();
+        }
     }
 }
 

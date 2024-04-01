@@ -9,6 +9,12 @@ public class MovieController {
         return movieCollection.addMovie(title, director, genre, year, isInColor, lengthInMinutes);
     }
 
+    public void removeMovie(String title) {
+        movieCollection.removeMovie(title);
+
+    }
+
+
     public void printList() {
         movieCollection.printList();
     }
@@ -20,8 +26,6 @@ public class MovieController {
     public void editMovie(String title) {
         movieCollection.editMovie(title);
     }
-
-
 
 
 }
